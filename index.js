@@ -14,12 +14,24 @@ bot.on('text', async (ctx) => {
     if (userMessage.startsWith('/')) {
         const command = userMessage.slice(1); // Remove the leading '/'
         try {
-            const response = await fetch('https://api.binance.com/api/v3/ticker/price');
+            const response = await fetch('https://api.binance.com/api/v3/ticker/24hr');
             if (response.ok) {
                 const data = await response.json();
                 const coinData = data.find(item => item.symbol === `${command.toUpperCase()}`);
                 if (coinData) {
-                    const message = `${coinData.symbol} Price: ${coinData.price} USDT`;
+                    const message = `
+Market             |  ${coinData.symbol}
+-------------------- | ---------
+Last Traded    |  ${coinData.lastPrice}
+24hr change   |  ${coinData.priceChangePercent >= 0 ? '📈 +' : '📉 -'} ${coinData.priceChangePercent}% ${coinData.priceChangePercent >= 0 ? '⬆️' : '⬇️'}
+
+Buy at              |  ${coinData.askPrice}
+Sell at               |  ${coinData.bidPrice}
+24hr Low         |  ${coinData.lowPrice}
+24hr High        |  ${coinData.highPrice}
+24Hr Volume  |  ${coinData.volume}
+                    `;
+                    
             
                     // Create an inline keyboard button with a link to Binance
                     const binanceLink = `https://www.binance.com/en/trade/${coinData.symbol}`;
