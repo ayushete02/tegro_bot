@@ -1,4 +1,6 @@
 const { Telegraf, Markup } = require('telegraf');
+const express = require('express');
+const app = express();
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('market.db');
 
@@ -6,9 +8,17 @@ const Token = '6374334311:AAHl_pN-89lSK_o1ITPGNrQCbhIFiwwtZl4'
 const bot = new Telegraf(Token); // Replace with your bot token
 
 // Define X as the threshold percentage
-const X = 0.08; // Change this value as needed
-const targetChatId = -1002091612309;
-// const targetChatId = 5967053862;
+const X = 0.03; // Change this value as needed
+// const targetChatId = -1002091612309;
+const targetChatId = 5967053862;
+
+app.get('/', (req, res) => {
+  res.send("Hello World!");
+});
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
 
 bot.start((ctx) => ctx.reply('Welcome!!'));
 
